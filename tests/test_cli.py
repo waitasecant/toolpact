@@ -209,3 +209,41 @@ def test_full_workflow(lf, monkeypatch, capsys):
     code = run(["check", "--lockfile", str(lf)], monkeypatch)
     capsys.readouterr()
     assert code == 0
+
+
+def test_no_subcommand(monkeypatch, capsys):
+    code = run([], monkeypatch)
+    assert code == 0
+
+
+def test_check_empty_lockfile(lf, monkeypatch, capsys):
+    LockFile(lf).write({"_toolpact": "1", "functions": {}})
+    code = run(["check", "--lockfile", str(lf)], monkeypatch)
+    assert code == 0
+    assert "no functions registered" in capsys.readouterr().out
+
+
+def test_diff_fn_no_changes(lf, monkeypatch, capsys):
+    def fn(q: str) -> str: ...
+
+    pact(fn, lockfile=lf)
+    run(["diff", "fn", "--lockfile", str(lf)], monkeypatch)
+    assert "No pending changes for 'fn'" in capsys.readouterr().out
+
+
+def test_accept_no_pending(lf, monkeypatch, capsys):
+    def fn(q: str) -> str: ...
+
+    pact(fn, lockfile=lf)
+    run(["accept", "fn", "--lockfile", str(lf)], monkeypatch)
+    assert "no pending change" in capsys.readouterr().out
+
+
+def test_list_empty(lf, monkeypatch, capsys):
+    run(["list", "--lockfile", str(lf)], monkeypatch)
+    assert "No functions registered" in capsys.readouterr().out
+
+
+def test_accept_not_found(lf, monkeypatch, capsys):
+    run(["accept", "missing", "--lockfile", str(lf)], monkeypatch)
+    assert "not found" in capsys.readouterr().out

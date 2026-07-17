@@ -120,3 +120,34 @@ def test_pretty_contains_param_name():
     new = _s({"q": {"type": "integer"}}, ["q"])
     diff = compute_diff(old, new)
     assert "q" in diff.pretty()
+
+
+def test_summary_no_changes():
+    s = _s({"q": {"type": "string"}}, ["q"])
+    diff = compute_diff(s, s)
+    assert diff.summary() == "no changes"
+
+
+def test_pretty_removed():
+    old = _s({"q": {"type": "string"}, "n": {"type": "integer"}}, ["q"])
+    new = _s({"q": {"type": "string"}}, ["q"])
+    diff = compute_diff(old, new)
+    out = diff.pretty()
+    assert "BREAKING" in out
+    assert "n" in out
+
+
+def test_pretty_required_changed():
+    old = _s({"q": {"type": "string"}, "n": {"type": "integer"}}, ["q", "n"])
+    new = _s({"q": {"type": "string"}, "n": {"type": "integer", "default": 5}}, ["q"])
+    diff = compute_diff(old, new)
+    assert "now optional" in diff.pretty()
+
+
+def test_pretty_enum_changed():
+    old = _s({"tier": {"type": "string", "enum": ["A", "B", "C"]}}, ["tier"])
+    new = _s({"tier": {"type": "string", "enum": ["A", "B"]}}, ["tier"])
+    diff = compute_diff(old, new)
+    out = diff.pretty()
+    assert "enum changed" in out
+    assert "tier" in out

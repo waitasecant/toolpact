@@ -128,3 +128,17 @@ def test_first_paragraph_description():
 
     s = generate_schema(fn)
     assert s["description"] == "Short desc."
+
+
+def test_literal_mixed():
+    assert _to_schema(Literal["a", 1]) == {"enum": ["a", 1]}
+
+
+def test_optional_complex_inner():
+    assert _to_schema(Optional[Literal["a", 1]]) == {
+        "anyOf": [{"enum": ["a", 1]}, {"type": "null"}]
+    }
+
+
+def test_unknown_type():
+    assert _to_schema(bytes) == {}
