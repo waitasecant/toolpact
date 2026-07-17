@@ -49,6 +49,20 @@ def test_hash_format():
 
 
 def test_dict_order_independent():
-    s1 = {"name": "fn", "parameters": {"type": "object", "properties": {"a": {"type": "string"}, "b": {"type": "integer"}}, "required": ["a"]}}
-    s2 = {"parameters": {"required": ["a"], "properties": {"b": {"type": "integer"}, "a": {"type": "string"}}, "type": "object"}, "name": "fn"}
+    s1 = {
+        "name": "fn",
+        "parameters": {
+            "type": "object",
+            "properties": {"a": {"type": "string"}, "b": {"type": "integer"}},
+            "required": ["a"],
+        },
+    }
+    s2 = {
+        "parameters": {
+            "required": ["a"],
+            "properties": {"b": {"type": "integer"}, "a": {"type": "string"}},
+            "type": "object",
+        },
+        "name": "fn",
+    }
     assert schema_hash(s1) == schema_hash(s2)

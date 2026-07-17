@@ -92,7 +92,9 @@ def _to_schema(ann) -> dict:
 
 def _param_doc(doc: str, name: str) -> str:
     # Google style: "    name (type): description"
-    m = re.search(rf"^\s+{re.escape(name)}\s*(?:\([^)]*\))?\s*:\s*(.+)$", doc, re.MULTILINE)
+    m = re.search(
+        rf"^\s+{re.escape(name)}\s*(?:\([^)]*\))?\s*:\s*(.+)$", doc, re.MULTILINE
+    )
     if m:
         return m.group(1).strip()
 

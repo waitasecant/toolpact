@@ -13,7 +13,12 @@ def test_read_missing(lock):
 
 
 def test_roundtrip(lock):
-    entry = {"hash": "sha256:abc", "schema": {"name": "fn"}, "accepted_at": "2026-01-01", "breaking": False}
+    entry = {
+        "hash": "sha256:abc",
+        "schema": {"name": "fn"},
+        "accepted_at": "2026-01-01",
+        "breaking": False,
+    }
     lock.set("fn", entry)
     assert lock.get("fn") == entry
 

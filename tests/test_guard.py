@@ -163,9 +163,8 @@ def test_description_change_no_raise(lf):
 
 
 def test_unresolvable_annotation_no_crash(lf):
-    # verify pact doesn't crash on unresolvable string annotations
-    def fn(q: "NonExistentType") -> str: ...  # type: ignore[name-defined]
-
-    # should not crash even if annotation can't be resolved
-    @pact(lockfile=lf)
+    # verify pact doesn't crash when get_type_hints fails to resolve an annotation
     def fn(q: str) -> str: ...
+
+    fn.__annotations__ = {"q": "NonExistentType", "return": str}
+    pact(fn, lockfile=lf)

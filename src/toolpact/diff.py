@@ -84,16 +84,22 @@ def compute_diff(old: dict, new: dict) -> SchemaDiff:
 
         if old_enum != new_enum:
             removed = [v for v in (old_enum or []) if v not in (new_enum or [])]
-            changes.append(Change(name, "enum_changed", old_enum, new_enum, len(removed) > 0))
+            changes.append(
+                Change(name, "enum_changed", old_enum, new_enum, len(removed) > 0)
+            )
         elif _struct(op) != _struct(np):
             breaking = name in old_req
-            changes.append(Change(name, "type_changed", _struct(op), _struct(np), breaking))
+            changes.append(
+                Change(name, "type_changed", _struct(op), _struct(np), breaking)
+            )
 
         old_was_req = name in old_req
         new_is_req = name in new_req
         if old_was_req != new_is_req:
             breaking = not old_was_req and new_is_req
-            changes.append(Change(name, "required_changed", old_was_req, new_is_req, breaking))
+            changes.append(
+                Change(name, "required_changed", old_was_req, new_is_req, breaking)
+            )
 
     return SchemaDiff(fn_name, changes)
 

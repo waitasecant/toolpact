@@ -44,7 +44,9 @@ def test_union_with_none_pipe():
 
 
 def test_union():
-    assert _to_schema(Union[str, int]) == {"anyOf": [{"type": "string"}, {"type": "integer"}]}
+    assert _to_schema(Union[str, int]) == {
+        "anyOf": [{"type": "string"}, {"type": "integer"}]
+    }
 
 
 def test_any():
@@ -66,8 +68,7 @@ def test_generate_basic():
 
 
 def test_generate_no_annotations():
-    def legacy(query, limit):
-        ...
+    def legacy(query, limit): ...
 
     s = generate_schema(legacy)
     assert s["parameters"]["properties"]["query"] == {}
@@ -76,8 +77,7 @@ def test_generate_no_annotations():
 
 
 def test_generate_skips_args_kwargs():
-    def fn(*args, **kwargs):
-        ...
+    def fn(*args, **kwargs): ...
 
     s = generate_schema(fn)
     assert s["parameters"]["properties"] == {}
@@ -112,8 +112,7 @@ def test_generate_numpy_docstring():
 
 
 def test_none_default_not_stored():
-    def fn(limit: int | None = None):
-        ...
+    def fn(limit: int | None = None): ...
 
     s = generate_schema(fn)
     assert "default" not in s["parameters"]["properties"]["limit"]

@@ -31,10 +31,20 @@ class PactChangedWarning(UserWarning):
 
 
 @overload
-def pact(fn: F, *, breaking_only: bool = ..., lockfile: Path = ..., mode: str = ...) -> F: ...
+def pact(
+    fn: F, *, breaking_only: bool = ..., lockfile: Path = ..., mode: str = ...
+) -> F: ...
 @overload
-def pact(fn: None = ..., *, breaking_only: bool = ..., lockfile: Path = ..., mode: str = ...) -> Callable[[F], F]: ...
-def pact(fn=None, *, breaking_only: bool = False, lockfile: Path = LOCKFILE, mode: str = "eager"):
+def pact(
+    fn: None = ..., *, breaking_only: bool = ..., lockfile: Path = ..., mode: str = ...
+) -> Callable[[F], F]: ...
+def pact(
+    fn=None,
+    *,
+    breaking_only: bool = False,
+    lockfile: Path = LOCKFILE,
+    mode: str = "eager",
+):
     """
     Decorator that checks a function's tool schema against the lockfile at import time.
 
@@ -44,7 +54,9 @@ def pact(fn=None, *, breaking_only: bool = False, lockfile: Path = LOCKFILE, mod
         mode: "eager" (check at import) or "lazy" (check on first call).
     """
     if fn is None:
-        return lambda f: pact(f, breaking_only=breaking_only, lockfile=lockfile, mode=mode)
+        return lambda f: pact(
+            f, breaking_only=breaking_only, lockfile=lockfile, mode=mode
+        )
 
     if mode == "lazy":
         return _lazy_wrap(fn, breaking_only, lockfile)
@@ -60,12 +72,15 @@ def _check(fn, breaking_only, lockfile):
     stored = lock.get(fn.__name__)
 
     if stored is None:
-        lock.set(fn.__name__, {
-            "accepted_at": datetime.now(timezone.utc).isoformat(),
-            "breaking": False,
-            "hash": h,
-            "schema": schema,
-        })
+        lock.set(
+            fn.__name__,
+            {
+                "accepted_at": datetime.now(timezone.utc).isoformat(),
+                "breaking": False,
+                "hash": h,
+                "schema": schema,
+            },
+        )
         return
 
     if stored["hash"] == h:
