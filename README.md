@@ -1,6 +1,6 @@
 # `toolpact`
 
-[![PyPI Version](https://img.shields.io/pypi/v/toolpact?logo=pypi&logoColor=white&label=PyPI&color=neongreen)](https://pypi.org/project/toolpact/)
+[![PyPI Version](https://img.shields.io/pypi/v/toolpact?pypiBaseUrl=https%3A%2F%2Fpypi.org&logo=pypi&logoColor=white&label=PyPI&color=neongreen)](https://pypi.org/project/toolpact/)
 [![Tests](https://img.shields.io/github/actions/workflow/status/waitasecant/toolpact/test.yml?logo=github&label=Tests)](https://github.com/waitasecant/toolpact/actions/workflows/test.yml)
 [![Codecov](https://img.shields.io/codecov/c/github/waitasecant/toolpact?logo=codecov&label=Coverage&color=neongreen)](https://codecov.io/gh/waitasecant/toolpact)
 [![License: MIT](https://img.shields.io/badge/License-MIT-neon.svg)](LICENSE)
